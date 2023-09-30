@@ -2,17 +2,24 @@ package com.misbah.todo.core.di.module
 
 import android.app.Application
 import android.content.Context
+import androidx.lifecycle.SavedStateHandle
+import androidx.room.Room
 import com.misbah.todo.core.data.remote.APIService
 import com.misbah.todo.core.data.remote.RemoteDataSource
 import com.misbah.todo.core.di.NetworkConnectionInterceptor
 import com.misbah.todo.ui.utils.Utils
 import com.google.gson.Gson
+import com.misbah.todo.core.data.storage.PreferencesManager
+import com.misbah.todo.core.data.storage.TaskDatabase
 import com.misbah.todo.ui.ToDoApplication
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Named
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 /**
@@ -38,6 +45,9 @@ class AppModule {
     @Provides
     fun provideGson() = Gson()
 
+    @Provides
+    fun provideSavedStateHandle() = SavedStateHandle()
+
     @Singleton
     @Provides
     fun provideUtils(context: Context) = Utils(context = context)
@@ -57,11 +67,39 @@ class AppModule {
     @Named("MAIN")
     fun provideMainDispatchers(): CoroutineDispatcher = Dispatchers.Main
 
+    @ApplicationScope
+    @Provides
+    @Singleton
+    fun provideApplicationScope() = CoroutineScope(SupervisorJob())
+
+    @Provides
+    @Singleton
+    fun provideDatabase(
+        app: Application,
+        callback: TaskDatabase.Callback
+    ) = Room.databaseBuilder(app, TaskDatabase::class.java, "task_database")
+        .fallbackToDestructiveMigration()
+        .addCallback(callback)
+        .build()
+
+    @Provides
+    fun provideTaskDao(db: TaskDatabase) = db.taskDao()
+
+
     @Provides
     @Singleton
     fun provideNetworkConnectionInterceptor(utils: Utils) = NetworkConnectionInterceptor(utils)
 
     @Provides
     @Singleton
+    fun providePreferencesManager(context : Context) = PreferencesManager(context)
+
+
+    @Provides
+    @Singleton
     fun provideRemoteDataSource(apiService: APIService) = RemoteDataSource(apiService)
+
 }
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class ApplicationScope

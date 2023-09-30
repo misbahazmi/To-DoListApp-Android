@@ -21,7 +21,8 @@ import javax.inject.Singleton
  * GitHub: https://github.com/misbahazmi
  * Expertise: Android||Java/Kotlin||Flutter
  */
-
+val <T> T.exhaustive: T
+    get() = this
 @Singleton
 open class Utils @Inject constructor(val context: Context) {
 

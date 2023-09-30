@@ -12,4 +12,20 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="do_you_want_quit">Do you want to quit?</string>
+    <string name="tab_again_to_quit">Tab again to quit the app. See you next tim~</string>
+    <string name="cancel">Cancel</string>
+    <string name="quit">Quit</string>
+    <string name="title">Title</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="description">Description</string>
+    <string name="enter_description">Enter Task Description</string>
+    <string name="add_tasks">Input New Task Here</string>
+    <string name="category">No Category</string>
+    <string name="category_text">Category</string>
+    <string name="enter_category_text">Enter Category</string>
+    <string name="save">Save</string>
+    <string name="add_category">Input New Task Category</string>
+    <string name="tasks">Tasks</string>
+    <string name="delete_confirmation">Confirmation</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.misbah.todo.ui.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
@@ -63,3 +64,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
+
+
+const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
+const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1

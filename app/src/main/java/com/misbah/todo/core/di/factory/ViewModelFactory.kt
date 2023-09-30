@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider
  * GitHub: https://github.com/misbahazmi
  * Expertise: Android||Java/Kotlin||Flutter
  */
+@Suppress("UNCHECKED_CAST")
 class ViewModelFactory<V: ViewModel>(private val viewModel: V) : ViewModelProvider.Factory {
 
-    @SuppressWarnings("unchecked")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(viewModel::class.java))
             return viewModel as T

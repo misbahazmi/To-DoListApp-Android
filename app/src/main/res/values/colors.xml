@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#FFB8B8</color>
+    <color name="gray">#CFCFCF</color>
     <color name="purple_200">#FFB8B8</color>
     <color name="purple_500">#FFB8B8</color>
     <color name="purple_700">#FFB8B8</color>
@@ -10,4 +11,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="text_color_blue">#2196F3</color>
     <color name="text_color_red">#F1675D</color>
+    <color name="text_color_red_faded">#F1A29D</color>
 </resources>

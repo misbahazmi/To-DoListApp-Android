@@ -12,7 +12,6 @@ import com.misbah.todo.databinding.ActivitySpalshBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,7 +38,6 @@ class SplashActivity : BaseActivity<MainViewModel>() {
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .placeholder(R.drawable.todo_list)
             .into(binding.imgToDo)
-
         activityScope.launch {
             delay(3000)
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
