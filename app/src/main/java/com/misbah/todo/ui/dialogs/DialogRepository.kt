@@ -1,6 +1,5 @@
 package com.misbah.todo.ui.dialogs
-
-import com.misbah.todo.core.data.storage.PreferencesManager
+import com.misbah.todo.core.data.storage.TaskDao
 
 /**
  * @author: Mohammad Misbah
@@ -10,6 +9,8 @@ import com.misbah.todo.core.data.storage.PreferencesManager
  * GitHub: https://github.com/misbahazmi
  * Expertise: Android||Java/Kotlin||Flutter
  */
-open class DialogRepository (private val localDataSource: PreferencesManager){
-
+open class DialogRepository (private val taskDao : TaskDao){
+    fun deleteAllCompletedTasks(){
+        taskDao.deleteCompletedTasks()
+    }
 }

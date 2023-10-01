@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.misbah.todo.core.data.model.Task
 import com.misbah.todo.core.di.module.ApplicationScope
+import com.nytimes.utils.AppEnums
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,14 +27,14 @@ abstract class TaskDatabase : RoomDatabase() {
             val dao = database.get().taskDao()
 
             applicationScope.launch {
-                dao.insert(Task("Wash the dishes"))
-                dao.insert(Task("Do the laundry"))
-                dao.insert(Task("Buy groceries", important = true))
-                dao.insert(Task("Prepare food", completed = true))
-                dao.insert(Task("Call mom"))
-                dao.insert(Task("Visit grandma", completed = true))
-                dao.insert(Task("Repair my bike"))
-                dao.insert(Task("Call Elon Musk"))
+                dao.insert(Task("Wash the dishes","Wash the dishes"))
+                dao.insert(Task("Do the laundry", "Do the laundry"))
+                dao.insert(Task("Buy groceries","Buy groceries", important = AppEnums.TasksPriority.High.value))
+                dao.insert(Task("Prepare food", "Prepare food", important =  AppEnums.TasksPriority.Medium.value))
+                dao.insert(Task("Call mom", "Calling mom"))
+                dao.insert(Task("Visit grandma","Visiting native place to meet grandma",  completed = true))
+                dao.insert(Task("Repair my bike","Repair and servicing of Bike"))
+                dao.insert(Task("Call Elon Musk","Calling Elon Musk"))
             }
         }
     }

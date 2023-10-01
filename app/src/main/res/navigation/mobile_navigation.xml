@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/tasksFragment">
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/tasksFragment"
         android:name="com.misbah.todo.ui.tasks.TasksFragment"
         android:label="@string/tasks"
         tools:layout="@layout/fragment_tasks">
@@ -31,12 +31,21 @@
         android:id="@+id/deleteAllCompletedDialogFragment"
         android:name="com.misbah.todo.ui.dialogs.ConfirmationDialogFragment"
         android:label="@string/delete_confirmation" />
+
+    <dialog
+        android:id="@+id/dateTimePickerDialogFragment"
+        android:name="com.misbah.todo.ui.dialogs.TimePickerFragment"
+        android:label="@string/date_time_picker" />
+
     <action
         android:id="@+id/action_global_deleteAllCompletedDialogFragment"
         app:destination="@id/deleteAllCompletedDialogFragment" />
-
-
-
+    <action
+        android:id="@+id/action_addTask_to_DateTimePickerFragment"
+        app:destination="@id/dateTimePickerDialogFragment" />
+    <action
+        android:id="@+id/action_tasksFragment_to_addEditTaskFragment"
+        app:destination="@id/addEditTaskFragment" />
 
     <fragment
         android:id="@+id/nav_gallery"

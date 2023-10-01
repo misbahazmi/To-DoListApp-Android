@@ -1,6 +1,12 @@
 package com.misbah.todo.ui.dialogs
 
 import androidx.lifecycle.ViewModel
+import com.misbah.todo.core.data.model.Task
+import com.misbah.todo.ui.addedittask.AddEditTaskViewModel
+import com.misbah.todo.ui.main.ADD_TASK_RESULT_OK
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -12,5 +18,7 @@ import javax.inject.Inject
  * Expertise: Android||Java/Kotlin||Flutter
  */
 class DialogViewModel @Inject constructor(private val repository: DialogRepository) : ViewModel() {
-
+    fun onConfirmDeleteAllClick() =  CoroutineScope(Dispatchers.IO).launch {
+        repository.deleteAllCompletedTasks()
+    }
 }

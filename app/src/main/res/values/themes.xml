@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ToDoList" parent="Theme.MaterialComponents.Light">
+    <style name="Theme.ToDoList" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#FFB8B8</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -14,12 +14,16 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.ToDoList.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="Theme.ToDoList.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.ToDoList.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="Theme.ToDoList.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
 
     <style name="Theme.ToDoList.NoActionBar">
-        <item name="windowActionBar">false</item>
+        <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/white</item>

@@ -1,5 +1,6 @@
 package com.misbah.todo.ui.utils
 
+import androidx.appcompat.widget.SearchView
 import java.io.IOException
 /**
  * @author: Mohammad Misbah
@@ -10,3 +11,16 @@ import java.io.IOException
  * Expertise: Android||Java/Kotlin||Flutter
  */
 class NoInternetException(message: String): IOException(message)
+
+inline fun SearchView.onQueryTextChanged(crossinline listener: (String) -> Unit) {
+    this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            return true
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean {
+            listener(newText.orEmpty())
+            return true
+        }
+    })
+}

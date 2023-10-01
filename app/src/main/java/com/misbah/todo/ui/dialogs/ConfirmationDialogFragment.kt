@@ -54,9 +54,8 @@ class ConfirmationDialogFragment :  BaseFragment<DialogViewModel>()  {
         dismiss()
     }
 
-
-
     fun clickOnContinue() {
-
+        viewModel.onConfirmDeleteAllClick()
+        dismiss()
     }
 }

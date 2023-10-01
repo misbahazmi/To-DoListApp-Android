@@ -13,11 +13,9 @@ import androidx.lifecycle.ViewModelProvider
  */
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory<V: ViewModel>(private val viewModel: V) : ViewModelProvider.Factory {
-
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(viewModel::class.java))
             return viewModel as T
         throw IllegalAccessException("Unknown class name")
     }
-
 }

@@ -4,6 +4,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -54,6 +55,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
     testImplementation("junit:junit:4.13.2")
@@ -94,4 +96,7 @@ dependencies {
 
     //Datastore
     implementation("androidx.datastore:datastore-preferences:1.1.0-alpha05")
+
+    //TagView
+    implementation(project(":chips-view-lib"))
 }

@@ -2,6 +2,7 @@ package com.misbah.todo.ui.dialogs
 
 import androidx.lifecycle.ViewModelProvider
 import com.misbah.todo.core.data.storage.PreferencesManager
+import com.misbah.todo.core.data.storage.TaskDao
 import com.misbah.todo.core.di.factory.ViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -23,8 +24,8 @@ class DialogFragmentModule {
     }
 
     @Provides
-    fun provideLeadsRepository(preferencesManager: PreferencesManager) : DialogRepository {
-        return DialogRepository(preferencesManager)
+    fun provideDialogRepository(taskDao : TaskDao) : DialogRepository {
+        return DialogRepository(taskDao)
     }
 
     @Provides

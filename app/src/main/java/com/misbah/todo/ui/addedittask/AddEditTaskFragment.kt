@@ -1,23 +1,39 @@
 package com.misbah.todo.ui.addedittask
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
+import com.misbah.chips.ChipListener
+import com.misbah.todo.R
 import com.misbah.todo.core.base.BaseFragment
+import com.misbah.todo.core.data.model.Category
 import com.misbah.todo.databinding.BottomSheetAddTasksBinding
+import com.misbah.todo.ui.adapters.CategoryArrayAdapter
+import com.misbah.todo.ui.dialogs.TimePickerFragment
+import com.misbah.todo.ui.main.MainActivity
+import com.misbah.todo.ui.tasks.TasksFragmentDirections
 import com.misbah.todo.ui.utils.exhaustive
+import com.nytimes.utils.AppEnums
+import kotlinx.coroutines.launch
+import java.text.DateFormat
 import javax.inject.Inject
 
 class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>() {
+    private val tasksArgs: AddEditTaskFragmentArgs by navArgs()
     private var _binding: BottomSheetAddTasksBinding? = null
     internal lateinit var viewModel: AddEditTaskViewModel
     @Inject
@@ -27,59 +43,116 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>() {
         viewModel = ViewModelProvider(viewModelStore, factory)[AddEditTaskViewModel::class.java]
         return viewModel
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = BottomSheetAddTasksBinding.inflate(inflater, container, false)
+        viewModel.task.value = tasksArgs.task
         binding.farg = this@AddEditTaskFragment
         return binding.root
     }
-
-
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val binding = BottomSheetAddTasksBinding.bind(view)
-
         binding.apply {
-            editTextTaskName.setText(viewModel.taskName)
-            checkBoxImportant.isChecked = viewModel.taskImportance
-            checkBoxImportant.jumpDrawablesToCurrentState()
-            textViewDateCreated.isVisible = viewModel.task != null
-            textViewDateCreated.text = "Created: ${viewModel.task?.createdDateFormatted}"
+            editTextTaskTitle.setText(viewModel.task.value?.title ?: "")
+            editTextTaskDescription.setText(viewModel.task.value?.name ?: "")
+            textViewDateDue.text = "Due Date: ${viewModel.task.value?.dueDateFormatted ?: DateFormat.getDateTimeInstance().format(viewModel.dueDate)}"
+            viewModel.taskTitle = viewModel.task.value?.title ?: ""
+            viewModel.taskDescription = viewModel.task.value?.name ?: ""
+            viewModel.dueDate = viewModel.task.value?.due ?: System.currentTimeMillis()
 
-            editTextTaskName.addTextChangedListener {
-                viewModel.taskName = it.toString()
+            editTextTaskTitle.addTextChangedListener {
+                viewModel.taskTitle = it.toString()
             }
-
-            checkBoxImportant.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.taskImportance = isChecked
+            editTextTaskDescription.addTextChangedListener {
+                viewModel.taskDescription = it.toString()
             }
+            chipTasksPriority.setChipListener( object : ChipListener {
+                override fun chipSelected(index: Int) {
+                    viewModel.taskImportance =  AppEnums.TasksPriority.values().distinct()
+                        .withIndex().first { it.value.value == index }.value.value
+                }
+                override fun chipDeselected(index: Int) {}
+                override fun chipRemoved(index: Int) {}
+              }
+            )
+            for ((index,data)  in AppEnums.TasksPriority.values().distinct().withIndex()){
+               chipTasksPriority.addChip(data.name)
+            }
+            if(viewModel.task.value?.important != null && viewModel.task.value?.important != 0)
+                viewModel.task.value?.important?.let { chipTasksPriority.setSelectedChip(it) }
+            else
+                chipTasksPriority.setSelectedChip(0)
+            val catList = arrayListOf<Category>()
+            for ((index,data)  in AppEnums.TasksCategory.values().distinct().withIndex()){
+                catList.add(Category(data.value, data.name))
+            }
+            val adapter = CategoryArrayAdapter(requireContext(), R.layout.item_cateory_spinner, catList)
+            spinnerCategory.adapter = adapter
+            spinnerCategory.onItemSelectedListener = object :
+                AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    viewModel.tasksCategory = catList[position].id
+                }
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
+            if(viewModel.task.value?.category != null  && viewModel.task.value?.category != 0)
+                viewModel.task.value?.category?.let { spinnerCategory.setSelection(it) }
+            else
+                spinnerCategory.setSelection(0)
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.addEditTaskEvent.collect { event ->
-                when (event) {
-                    is AddEditTaskViewModel.AddEditTaskEvent.ShowInvalidInputMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
-                    }
-                    is AddEditTaskViewModel.AddEditTaskEvent.NavigateBackWithResult -> {
-                        binding.editTextTaskName.clearFocus()
-                        setFragmentResult(
-                            "add_edit_request",
-                            bundleOf("add_edit_result" to event.result)
-                        )
-                        findNavController().popBackStack()
-                    }
-                }.exhaustive
+        childFragmentManager.setFragmentResultListener("date_time", this) { _, bundle ->
+            val result = bundle.getLong("date_time")
+            viewModel.onDateTimeResult(result)
+        }
+
+        val navController = findNavController()
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("date_time")?.observe(viewLifecycleOwner) {
+            viewModel.onDateTimeResult(it)
+        }
+
+        @Suppress("IMPLICIT_CAST_TO_ANY")
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.addEditTaskEvent.collect { event ->
+                    when (event) {
+                        is AddEditTaskViewModel.AddEditTaskEvent.ShowInvalidInputMessage -> {
+                            Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                        }
+                        is AddEditTaskViewModel.AddEditTaskEvent.NavigateBackWithResult -> {
+                            binding.editTextTaskTitle.clearFocus()
+                            binding.editTextTaskDescription.clearFocus()
+                            setFragmentResult(
+                                "add_edit_request",
+                                bundleOf("add_edit_result" to event.result)
+                            )
+                            findNavController().popBackStack()
+                        }
+                        is AddEditTaskViewModel.AddEditTaskEvent.ShowDateTimePicker ->{
+                            //TimePickerFragment().show(childFragmentManager, "timePicker")
+                            val action = AddEditTaskFragmentDirections.actionAddTaskToDateTimePickerFragment()
+                            findNavController().navigate(action)
+                        }
+                        is AddEditTaskViewModel.AddEditTaskEvent.DateTimeWithResult ->{
+                            viewModel.dueDate = event.result
+                            binding.textViewDateDue.text = "Due Date: ${viewModel.task.value?.dueDateFormatted ?: DateFormat.getDateTimeInstance().format(viewModel.dueDate)}"
+                        }
+                    }.exhaustive
+                }
             }
         }
+        (requireActivity() as MainActivity).hideFAB()
     }
 
     fun clickOnSave() {
         viewModel.onSaveClick()
+    }
+
+    fun clickOnDateTime(){
+       viewModel.showDatePicker()
     }
 }

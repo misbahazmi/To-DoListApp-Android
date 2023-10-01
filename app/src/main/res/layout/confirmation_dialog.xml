@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@null"
-                    android:src="@drawable/ic_image_default" />
+                    android:src="@drawable/ic_confirmation" />
             </LinearLayout>
 
             <TextView
@@ -44,8 +44,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
-                android:fontFamily="@font/adamina"
-                android:text="@string/do_you_want_quit"
+                android:fontFamily="@font/lato"
+                android:text="@string/confirm_deletion"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -55,8 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
-                android:fontFamily="@font/adamina"
-                android:text="@string/tab_again_to_quit"
+                android:fontFamily="@font/lato"
+                android:text="@string/delete_confirmation_msg"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -70,14 +70,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
                     android:onClick="@{()->farg.clickOnCancel()}"
                     android:gravity="center"
-                    android:padding="12dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/adamina"
+                        android:fontFamily="@font/lato"
                         android:text="@string/cancel"
                         android:textAllCaps="true"
                         android:textColor="@color/text_color_red_faded"
@@ -88,15 +89,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:onClick="@{()->farg.clickOnContinue()}"
-                    android:padding="12dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/adamina"
-                        android:text="@string/quit"
+                        android:fontFamily="@font/lato"
+                        android:text="@string/yes"
                         android:textAllCaps="true"
                         android:textColor="@color/text_color_red"
                         android:textSize="14sp"

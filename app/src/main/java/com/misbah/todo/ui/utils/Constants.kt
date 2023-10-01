@@ -11,7 +11,7 @@ package com.misbah.todo.ui.utils
 object Constants {
 
     //Application TAGs
-    const val LOG_TAG = "ToDd-App-Log"
+    const val LOG_TAG = "ToDo_App-Log"
 
     const val PREF_NAME = "PrefName"
     const val IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch"

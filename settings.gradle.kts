@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "To-Do List"
 include(":app")
- 
+include(":chips-view-lib")

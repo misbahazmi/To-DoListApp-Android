@@ -28,4 +28,9 @@
     <string name="add_category">Input New Task Category</string>
     <string name="tasks">Tasks</string>
     <string name="delete_confirmation">Confirmation</string>
+    <string name="confirm_deletion">Confirm Deletion</string>
+    <string name="delete_confirmation_msg">Do you really want to delete all completed tasks?</string>
+    <string name="yes">Yes</string>
+    <string name="priority">Priority</string>
+    <string name="date_time_picker">Date Time Picker</string>
 </resources>
