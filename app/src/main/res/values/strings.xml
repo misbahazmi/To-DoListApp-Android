@@ -21,10 +21,12 @@
     <string name="description">Description</string>
     <string name="enter_description">Enter Task Description</string>
     <string name="add_tasks">Input New Task Here</string>
+    <string name="update_tasks">Task Details</string>
     <string name="category">No Category</string>
     <string name="category_text">Category</string>
     <string name="enter_category_text">Enter Category</string>
     <string name="save">Save</string>
+    <string name="update">Update</string>
     <string name="add_category">Input New Task Category</string>
     <string name="tasks">Tasks</string>
     <string name="delete_confirmation">Confirmation</string>
@@ -37,4 +39,6 @@
     <string name="menu_new_taks">New Task</string>
     <string name="menu_category">Category</string>
     <string name="menu_tasks_category">Task Category</string>
+    <string name="channel_name">To-Task Channel</string>
+    <string name="channel_description">To-do Tasks Notification Channel</string>
 </resources>

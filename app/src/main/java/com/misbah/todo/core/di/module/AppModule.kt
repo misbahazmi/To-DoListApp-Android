@@ -85,7 +85,6 @@ class AppModule {
     @Provides
     fun provideTaskDao(db: TaskDatabase) = db.taskDao()
 
-
     @Provides
     @Singleton
     fun provideNetworkConnectionInterceptor(utils: Utils) = NetworkConnectionInterceptor(utils)

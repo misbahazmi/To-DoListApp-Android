@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name=".ui.ToDoApplication"
         android:allowBackup="true"
@@ -28,7 +28,12 @@
             android:exported="false"
             android:theme="@style/Theme.ToDoList.NoActionBar">
         </activity>
-
+        <receiver
+            android:name=".notifications.NotificationReminderReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.POST_NOTIFICATIONS">
+        </receiver>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

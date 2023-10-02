@@ -1,6 +1,10 @@
-package com.misbah.todo.ui.dialogs
+package com.misbah.todo.notifications
+import android.content.Context
 import com.misbah.todo.core.data.storage.TaskDao
+import com.misbah.todo.ui.dialogs.DialogRepository
+import dagger.Provides
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * @author: Mohammad Misbah
@@ -10,8 +14,10 @@ import javax.inject.Inject
  * GitHub: https://github.com/misbahazmi
  * Expertise: Android||Java/Kotlin||Flutter
  */
-open class DialogRepository @Inject constructor(private val taskDao : TaskDao){
+
+open class TaskDataRepository @Inject constructor(private val taskDao : TaskDao){
     fun deleteAllCompletedTasks(){
         taskDao.deleteCompletedTasks()
     }
+
 }

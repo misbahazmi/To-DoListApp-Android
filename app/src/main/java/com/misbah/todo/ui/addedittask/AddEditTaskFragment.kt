@@ -9,7 +9,6 @@ import android.widget.AdapterView
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -21,12 +20,11 @@ import com.misbah.chips.ChipListener
 import com.misbah.todo.R
 import com.misbah.todo.core.base.BaseFragment
 import com.misbah.todo.core.data.model.Category
-import com.misbah.todo.databinding.BottomSheetAddTasksBinding
+import com.misbah.todo.databinding.FragmentAddEditTaskBinding
 import com.misbah.todo.ui.adapters.CategoryArrayAdapter
 import com.misbah.todo.ui.dialogs.TimePickerFragment
 import com.misbah.todo.ui.listeners.OnDateTimeListener
 import com.misbah.todo.ui.main.MainActivity
-import com.misbah.todo.ui.tasks.TasksFragmentDirections
 import com.misbah.todo.ui.utils.exhaustive
 import com.nytimes.utils.AppEnums
 import kotlinx.coroutines.launch
@@ -35,7 +33,7 @@ import javax.inject.Inject
 
 class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>(), OnDateTimeListener {
     private val tasksArgs: AddEditTaskFragmentArgs by navArgs()
-    private var _binding: BottomSheetAddTasksBinding? = null
+    private var _binding: FragmentAddEditTaskBinding? = null
     internal lateinit var viewModel: AddEditTaskViewModel
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -49,7 +47,7 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>(), OnDateTimeList
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BottomSheetAddTasksBinding.inflate(inflater, container, false)
+        _binding = FragmentAddEditTaskBinding.inflate(inflater, container, false)
         viewModel.task.value = tasksArgs.task
         binding.farg = this@AddEditTaskFragment
         return binding.root
@@ -58,6 +56,16 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>(), OnDateTimeList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+
+            if(viewModel.task.value == null){
+                btnSaveUpdate.text = getString(R.string.save)
+                textHeading.text = getString(R.string.add_tasks)
+            }
+            else {
+                btnSaveUpdate.text = getString(R.string.update)
+                textHeading.text = getString(R.string.update_tasks)
+            }
+
             editTextTaskTitle.setText(viewModel.task.value?.title ?: "")
             editTextTaskDescription.setText(viewModel.task.value?.name ?: "")
             textViewDateDue.text = "Due Date: ${viewModel.task.value?.dueDateFormatted ?: DateFormat.getDateTimeInstance().format(viewModel.dueDate)}"

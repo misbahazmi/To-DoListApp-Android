@@ -7,12 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.room.util.query
 import com.misbah.todo.core.data.model.Task
 import com.misbah.todo.core.data.storage.PreferencesManager
 import com.misbah.todo.core.data.storage.SortOrder
 import com.misbah.todo.core.data.storage.TaskDao
 import com.misbah.todo.ui.main.ADD_TASK_RESULT_OK
 import com.misbah.todo.ui.main.EDIT_TASK_RESULT_OK
+import com.misbah.todo.ui.utils.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,8 +46,9 @@ class TasksViewModel @Inject constructor(
     }.flatMapLatest { (query, filterPreferences) ->
         taskDao.getTasks(query, filterPreferences.sortOrder, filterPreferences.hideCompleted, filterPreferences.category)
     }
-
     val tasks = tasksFlow.asLiveData()
+
+    var remainingTasks: LiveData<List<Task>>? = null
 
     fun onSortOrderSelected(sortOrder: SortOrder) = CoroutineScope(Dispatchers.IO).launch {
         preferencesManager.updateSortOrder(sortOrder)
@@ -61,6 +64,12 @@ class TasksViewModel @Inject constructor(
 
     fun onTaskSelected(task: Task) = CoroutineScope(Dispatchers.IO).launch {
         tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))
+    }
+
+    fun getTasksRemainingTask() = CoroutineScope(Dispatchers.IO).launch {
+        val currentTime = System.currentTimeMillis()
+        val futureTime = System.currentTimeMillis() + Constants.TASK_REMINDER_TIME_INTERVAL
+        remainingTasks = taskDao.getTasksRemainingTask(true,currentTime,futureTime).asLiveData()
     }
 
     fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = CoroutineScope(Dispatchers.IO).launch {

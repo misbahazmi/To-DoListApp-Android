@@ -34,6 +34,7 @@ import com.misbah.todo.ui.main.MainActivity
 import com.misbah.todo.ui.utils.exhaustive
 import com.misbah.todo.ui.utils.onQueryTextChanged
 import com.nytimes.utils.AppEnums
+import com.nytimes.utils.AppLog
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -111,6 +112,10 @@ class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
 
         viewModel.tasks.observe(viewLifecycleOwner) {
             taskAdapter.submitList(it)
+        }
+
+        viewModel.remainingTasks?.observe(viewLifecycleOwner){
+            AppLog.debugD("SIZE: ${it.size}")
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

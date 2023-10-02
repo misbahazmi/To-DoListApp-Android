@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                android:id="@+id/text_heading"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/lato"
                 android:text="@string/add_tasks"
@@ -181,7 +182,20 @@
                     android:gravity="center"
                     android:background="@drawable/bg_category"
                     android:onClick="@{()->farg.clickOnSave()}"
-                    android:padding="12dp">
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:id="@+id/btn_save_update"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:fontFamily="@font/lato"
+                        android:text="@string/save"
+                        android:textColor="@color/text_color_red"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

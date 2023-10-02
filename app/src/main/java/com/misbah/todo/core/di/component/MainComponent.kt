@@ -4,6 +4,7 @@ import com.misbah.todo.core.di.builder.FragmentBuilder
 import com.misbah.todo.core.di.module.NetworkModule
 import com.misbah.todo.ui.ToDoApplication
 import com.misbah.todo.core.di.builder.ActivityBuilder
+import com.misbah.todo.core.di.builder.BroadcastReceiverModule
 import com.misbah.todo.core.di.module.AppModule
 import dagger.BindsInstance
 import dagger.Component
@@ -18,7 +19,8 @@ import javax.inject.Singleton
         AppModule::class,
         NetworkModule::class,
         ActivityBuilder::class,
-        FragmentBuilder::class
+        FragmentBuilder::class,
+        BroadcastReceiverModule::class
     ]
 )
 
