@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.catch
@@ -16,9 +17,9 @@ import javax.inject.Inject
 
 private const val TAG = "PreferencesManager"
 
-enum class SortOrder { BY_NAME, BY_DATE }
+enum class SortOrder { BY_NAME, BY_DATE, BY_PRIORITY }
 
-data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean)
+data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean, val category : Int)
 
 class PreferencesManager @Inject constructor(private  val context : Context) {
 
@@ -40,7 +41,8 @@ class PreferencesManager @Inject constructor(private  val context : Context) {
                 preferences[PreferencesKeys.SORT_ORDER] ?: SortOrder.BY_DATE.name
             )
             val hideCompleted = preferences[PreferencesKeys.HIDE_COMPLETED] ?: false
-            FilterPreferences(sortOrder, hideCompleted)
+            val taskCategory = preferences[PreferencesKeys.TASK_CATEGORY] ?: 0
+            FilterPreferences(sortOrder, hideCompleted, taskCategory)
         }
 
     suspend fun updateSortOrder(sortOrder: SortOrder) {
@@ -55,8 +57,15 @@ class PreferencesManager @Inject constructor(private  val context : Context) {
         }
     }
 
+    suspend fun updateTaskCategory(category: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.TASK_CATEGORY] = category
+        }
+    }
+
     private object PreferencesKeys {
         val SORT_ORDER = stringPreferencesKey("sort_order")
         val HIDE_COMPLETED = booleanPreferencesKey("hide_completed")
+        val TASK_CATEGORY = intPreferencesKey("task_category")
     }
 }

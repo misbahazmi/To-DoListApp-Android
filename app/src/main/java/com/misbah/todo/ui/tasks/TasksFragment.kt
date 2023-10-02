@@ -18,9 +18,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import com.misbah.chips.ChipCloud
+import com.misbah.chips.ChipListener
 import com.misbah.todo.R
 import com.misbah.todo.core.base.BaseFragment
+import com.misbah.todo.core.data.model.Category
 import com.misbah.todo.core.data.model.Task
 import com.misbah.todo.core.data.storage.SortOrder
 import com.misbah.todo.databinding.FragmentTasksBinding
@@ -29,6 +33,7 @@ import com.misbah.todo.ui.listeners.OnItemClickListener
 import com.misbah.todo.ui.main.MainActivity
 import com.misbah.todo.ui.utils.exhaustive
 import com.misbah.todo.ui.utils.onQueryTextChanged
+import com.nytimes.utils.AppEnums
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -58,6 +63,23 @@ class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
         val taskAdapter = TasksAdapter(this)
         binding.apply {
+            val catList = arrayListOf<Category>()
+            for ((index,data)  in AppEnums.TasksCategory.values().distinct().withIndex()){
+                catList.add(Category(data.value, data.name))
+            }
+            for (data in catList){
+                chipTasksCategory.addChip(data.name)
+            }
+            chipTasksCategory.updateHorizontalSpacing()
+            chipTasksCategory.setChipListener( object : ChipListener {
+                override fun chipSelected(index: Int) {
+                    val catId =  catList[index].id
+                    viewModel.onFilterCategoryClick(catId)
+                }
+                override fun chipDeselected(index: Int) {}
+                override fun chipRemoved(index: Int) {}
+              }
+            )
             recyclerViewTasks.apply {
                 adapter = taskAdapter
                 layoutManager = LinearLayoutManager(requireContext())
@@ -131,6 +153,14 @@ class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            if(viewModel.preferencesFlow.first().category != 0)
+                viewModel.preferencesFlow.first().category.let { binding.chipTasksCategory.setSelectedChip(it) }
+            else
+                binding.chipTasksCategory.setSelectedChip(0)
+        }
+
         setHasOptionsMenu(true)
         (requireActivity() as MainActivity).showFAB()
     }
@@ -164,8 +194,12 @@ class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
                 viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                 true
             }
-            R.id.action_sort_by_date_created -> {
+            R.id.action_sort_by_due_date -> {
                 viewModel.onSortOrderSelected(SortOrder.BY_DATE)
+                true
+            }
+            R.id.action_sort_by_priority -> {
+                viewModel.onSortOrderSelected(SortOrder.BY_PRIORITY)
                 true
             }
             R.id.action_hide_completed_tasks -> {

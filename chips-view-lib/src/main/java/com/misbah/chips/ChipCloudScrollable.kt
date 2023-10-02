@@ -4,9 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.widget.LinearLayout
 import com.misbah.chips.Chip.ChipBuilder
 
-class ChipCloud : FlowLayout, ChipListener {
+class ChipCloudScrollable : LinearLayout, ChipListener {
     private var context: Context?
     private var chipHeight = 0
     private var selectedColor = -1
@@ -17,15 +18,15 @@ class ChipCloud : FlowLayout, ChipListener {
     private var selectTransitionMS = 750
     private var deselectTransitionMS = 500
     private var mode = Mode.SINGLE
-    override var gravity = Gravity.LEFT
+    private var gravity = Gravity.LEFT
         set
     private var typeface: Typeface? = null
     private var allCaps = false
     private var rightRemove = false
     private var textSizePx = -1
-    override var verticalSpacing = 0
+    private var verticalSpacing = 0
         set
-    override var minimumHorizontalSpacing = 0
+    private var minimumHorizontalSpacing = 0
         set
     private var chipListener: ChipListener? = null
 
@@ -87,6 +88,7 @@ class ChipCloud : FlowLayout, ChipListener {
             val labels = resources.getStringArray(arrayReference)
             addChips(labels)
         }
+        orientation = HORIZONTAL
     }
 
     private fun init() {
@@ -264,6 +266,15 @@ class ChipCloud : FlowLayout, ChipListener {
         }
     }
 
+    fun updateHorizontalSpacing() {
+        val childCount = childCount
+        for (index in 0 until childCount) {
+            val view = getChildAt(index)
+            val layoutParams = view.layoutParams as LinearLayout.LayoutParams
+            layoutParams.setMargins(0,0,minimumHorizontalSpacing,0)
+        }
+    }
+
     override fun chipSelected(index: Int) {
         when (mode) {
             Mode.SINGLE, Mode.REQUIRED -> {
@@ -309,7 +320,7 @@ class ChipCloud : FlowLayout, ChipListener {
 
     //Apparently using the builder pattern to configure an object has been labelled a 'Bloch Builder'.
     class Configure {
-        private var chipCloud: ChipCloud? = null
+        private var chipCloud: ChipCloudScrollable? = null
         private var selectedColor = -1
         private var selectedFontColor = -1
         private var deselectedColor = -1
@@ -327,7 +338,7 @@ class ChipCloud : FlowLayout, ChipListener {
         private var verticalSpacing = -1
         private var leftDrawable: Bitmap? = null
         private val rightRemove = false
-        fun chipCloud(chipCloud: ChipCloud?): Configure {
+        fun chipCloud(chipCloud: ChipCloudScrollable?): Configure {
             this.chipCloud = chipCloud
             return this
         }

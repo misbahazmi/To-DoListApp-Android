@@ -42,7 +42,7 @@ class TasksViewModel @Inject constructor(
     ) { query, filterPreferences ->
         Pair(query, filterPreferences)
     }.flatMapLatest { (query, filterPreferences) ->
-        taskDao.getTasks(query, filterPreferences.sortOrder, filterPreferences.hideCompleted)
+        taskDao.getTasks(query, filterPreferences.sortOrder, filterPreferences.hideCompleted, filterPreferences.category)
     }
 
     val tasks = tasksFlow.asLiveData()
@@ -53,6 +53,10 @@ class TasksViewModel @Inject constructor(
 
     fun onHideCompletedClick(hideCompleted: Boolean) = CoroutineScope(Dispatchers.IO).launch {
         preferencesManager.updateHideCompleted(hideCompleted)
+    }
+
+    fun onFilterCategoryClick(taskCategory: Int) = CoroutineScope(Dispatchers.IO).launch {
+        preferencesManager.updateTaskCategory(taskCategory)
     }
 
     fun onTaskSelected(task: Task) = CoroutineScope(Dispatchers.IO).launch {

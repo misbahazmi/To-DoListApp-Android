@@ -29,7 +29,7 @@ class Chip : AppCompatTextView, View.OnClickListener {
     private var selectTransitionMS = 750
     private var deselectTransitionMS = 500
     private var isLocked = false
-    private var mode: ChipCloud.Mode? = null
+    private var mode: Mode? = null
     private var leftDrawable: Bitmap? = null
     fun setChipListener(listener: ChipListener?) {
         this.listener = listener
@@ -63,7 +63,7 @@ class Chip : AppCompatTextView, View.OnClickListener {
         selectedFontColor: Int,
         unselectedColor: Int,
         unselectedFontColor: Int,
-        mode: ChipCloud.Mode?,
+        mode: Mode?,
         leftDrawable: Bitmap?,
         isRemoveIcon: Boolean
     ) {
@@ -155,7 +155,7 @@ class Chip : AppCompatTextView, View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        if (mode !== ChipCloud.Mode.NONE) if (selected && !isLocked && mode !== ChipCloud.Mode.SINGLE) {
+        if (mode !== Mode.NONE) if (selected && !isLocked && mode !== Mode.SINGLE) {
             //set as unselected
             unselect()
             if (listener != null) {
@@ -281,7 +281,7 @@ class Chip : AppCompatTextView, View.OnClickListener {
         private var selectTransitionMS = 750
         private var deselectTransitionMS = 500
         private var chipListener: ChipListener? = null
-        private var mode: ChipCloud.Mode? = null
+        private var mode:Mode? = null
         private var leftDrawable: Bitmap? = null
         private var removeIcon = false
         fun index(index: Int): ChipBuilder {
@@ -344,7 +344,7 @@ class Chip : AppCompatTextView, View.OnClickListener {
             return this
         }
 
-        fun mode(mode: ChipCloud.Mode?): ChipBuilder {
+        fun mode(mode: Mode): ChipBuilder {
             this.mode = mode
             return this
         }

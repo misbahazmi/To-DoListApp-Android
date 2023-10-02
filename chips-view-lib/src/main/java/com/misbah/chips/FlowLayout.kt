@@ -11,11 +11,6 @@ import android.view.ViewGroup
 abstract class FlowLayout : ViewGroup {
     private var lineHeight = 0
     private val layoutProcessor = LayoutProcessor()
-
-    enum class Gravity {
-        LEFT, RIGHT, CENTER, STAGGERED
-    }
-
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 

@@ -18,10 +18,12 @@
             <item
                 android:id="@+id/action_sort_by_name"
                 android:title="Sort by name" />
-
             <item
-                android:id="@+id/action_sort_by_date_created"
-                android:title="Sort by date created" />
+                android:id="@+id/action_sort_by_due_date"
+                android:title="Sort by due date" />
+            <item
+                android:id="@+id/action_sort_by_priority"
+                android:title="Sort by Priority" />
 
         </menu>
 
