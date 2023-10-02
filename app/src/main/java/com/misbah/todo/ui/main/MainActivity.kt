@@ -1,17 +1,18 @@
 package com.misbah.todo.ui.main
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.View
+import android.util.Log
 import android.view.animation.AnimationUtils
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -25,10 +26,6 @@ import com.misbah.todo.databinding.ActivityMainBinding
 import com.misbah.todo.ui.tasks.TasksFragmentDirections
 import com.misbah.todo.ui.tasks.TasksViewModel
 import com.misbah.todo.ui.utils.exhaustive
-import com.misbah.todo.ui.utils.gone
-import com.misbah.todo.ui.utils.invisible
-import com.misbah.todo.ui.utils.visible
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,7 +39,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun getViewModel(): MainViewModel {
         return viewModel
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,7 +57,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
         navController = navHostFragment.findNavController()
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.tasksFragment, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.tasksFragment, R.id.nav_settings, R.id.nav_category
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -88,6 +84,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
                                 )
                             navController.navigate(action)
                         }
+                        is TasksViewModel.TasksEvent.QuitAppPopUp -> {
+                            val action =
+                                TasksFragmentDirections.actionGlobalQuitAppDialogFragment()
+                            navController.navigate(action)
+                        }
                         else ->{}
                     }.exhaustive
                 }
@@ -95,6 +96,35 @@ class MainActivity : BaseActivity<MainViewModel>() {
         }
         binding.appBarMain.fab.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_anim))
 
+        if (Build.VERSION.SDK_INT >= 33) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                exitOnBackPressed()
+            }
+        } else {
+            onBackPressedDispatcher.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        Log.i("TAG", "handleOnBackPressed: Exit")
+                        exitOnBackPressed()
+                    }
+                })
+        }
+        navView.setNavigationItemSelectedListener { menuItem ->
+            drawerLayout.closeDrawers()   // close drawer when item is tapped
+            val bundle = bundleOf("title" to "New Task", "task" to null)
+            when (menuItem.itemId) {
+                R.id.addEditTaskFragment -> {
+                    navController.navigate(menuItem.itemId, bundle)
+                }
+                else -> {
+                    navController.navigate(menuItem.itemId)
+                }
+            }
+            true
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -107,7 +137,12 @@ class MainActivity : BaseActivity<MainViewModel>() {
     fun showFAB(){
         binding.appBarMain.fab.show()
     }
-
+    fun exitOnBackPressed() {
+        if (navController.currentDestination?.id == R.id.tasksFragment)
+            viewModel.onBackClickQuitApp()
+        else
+            navController.popBackStack()
+    }
 }
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
 const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1

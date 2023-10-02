@@ -7,13 +7,9 @@ import android.os.Bundle
 import android.text.format.DateFormat
 import android.widget.DatePicker
 import android.widget.TimePicker
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.misbah.todo.core.base.BaseFragment
-import com.misbah.todo.databinding.ConfirmationDialogBinding
+import com.misbah.todo.ui.listeners.OnDateTimeListener
 import com.misbah.todo.ui.utils.Utils
 import com.nytimes.utils.AppLog
 import java.util.Calendar
@@ -26,6 +22,14 @@ class TimePickerFragment : BaseFragment<DialogViewModel>()  , TimePickerDialog.O
     lateinit var factory: ViewModelProvider.Factory
     @Inject
     lateinit var utils: Utils
+    companion object {
+        private lateinit var dateTimeListener: OnDateTimeListener
+        @JvmStatic
+        fun newInstance(listener: OnDateTimeListener) = run {
+            dateTimeListener = listener
+            TimePickerFragment()
+        }
+    }
     override fun getViewModel(): DialogViewModel {
         viewModel = ViewModelProvider(viewModelStore, factory)[DialogViewModel::class.java]
         return viewModel
@@ -38,16 +42,14 @@ class TimePickerFragment : BaseFragment<DialogViewModel>()  , TimePickerDialog.O
         return  DatePickerDialog(requireContext(), this, year, month, day)
     }
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-        calendar.set(Calendar.MINUTE, minute)
-        AppLog.debugD("Date: ${java.text.DateFormat.getDateTimeInstance().format(calendar.time.time)}")
-//        setFragmentResult(
-//            "date_time",
-//            bundleOf("date_time" to calendar.time.time)
-//        )
-//        val navController = findNavController()
-//        navController.previousBackStackEntry?.savedStateHandle?.set("date_time", calendar.time.time)
-//        navController.popBackStack()
+        try {
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+            calendar.set(Calendar.MINUTE, minute)
+            AppLog.debugD("Date: ${java.text.DateFormat.getDateTimeInstance().format(calendar.time.time)}")
+            dateTimeListener.onDateTimeSelected(calendar.time.time)
+        }catch (e : Exception) {
+            e.localizedMessage?.let { AppLog.debugE(it) }
+        }
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {

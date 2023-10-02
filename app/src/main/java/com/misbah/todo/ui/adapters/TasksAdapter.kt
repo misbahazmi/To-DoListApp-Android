@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.misbah.todo.core.data.model.Task
 import com.misbah.todo.databinding.ItemTaskBinding
+import com.misbah.todo.ui.listeners.OnItemClickListener
 
 class TasksAdapter(private val listener: OnItemClickListener) :
     ListAdapter<Task, TasksAdapter.TasksViewHolder>(DiffCallback()) {
@@ -52,11 +53,6 @@ class TasksAdapter(private val listener: OnItemClickListener) :
                 labelPriority.isVisible = task.important != 0
             }
         }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(task: Task)
-        fun onCheckBoxClick(task: Task, isChecked: Boolean)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Task>() {

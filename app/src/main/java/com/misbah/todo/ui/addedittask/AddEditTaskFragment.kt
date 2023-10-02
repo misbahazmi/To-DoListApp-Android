@@ -24,6 +24,7 @@ import com.misbah.todo.core.data.model.Category
 import com.misbah.todo.databinding.BottomSheetAddTasksBinding
 import com.misbah.todo.ui.adapters.CategoryArrayAdapter
 import com.misbah.todo.ui.dialogs.TimePickerFragment
+import com.misbah.todo.ui.listeners.OnDateTimeListener
 import com.misbah.todo.ui.main.MainActivity
 import com.misbah.todo.ui.tasks.TasksFragmentDirections
 import com.misbah.todo.ui.utils.exhaustive
@@ -32,7 +33,7 @@ import kotlinx.coroutines.launch
 import java.text.DateFormat
 import javax.inject.Inject
 
-class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>() {
+class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>(), OnDateTimeListener {
     private val tasksArgs: AddEditTaskFragmentArgs by navArgs()
     private var _binding: BottomSheetAddTasksBinding? = null
     internal lateinit var viewModel: AddEditTaskViewModel
@@ -105,16 +106,6 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>() {
                 spinnerCategory.setSelection(0)
         }
 
-        childFragmentManager.setFragmentResultListener("date_time", this) { _, bundle ->
-            val result = bundle.getLong("date_time")
-            viewModel.onDateTimeResult(result)
-        }
-
-        val navController = findNavController()
-        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<Long>("date_time")?.observe(viewLifecycleOwner) {
-            viewModel.onDateTimeResult(it)
-        }
-
         @Suppress("IMPLICIT_CAST_TO_ANY")
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -133,9 +124,7 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>() {
                             findNavController().popBackStack()
                         }
                         is AddEditTaskViewModel.AddEditTaskEvent.ShowDateTimePicker ->{
-                            //TimePickerFragment().show(childFragmentManager, "timePicker")
-                            val action = AddEditTaskFragmentDirections.actionAddTaskToDateTimePickerFragment()
-                            findNavController().navigate(action)
+                            TimePickerFragment.newInstance(this@AddEditTaskFragment).show(childFragmentManager, "timePicker")
                         }
                         is AddEditTaskViewModel.AddEditTaskEvent.DateTimeWithResult ->{
                             viewModel.dueDate = event.result
@@ -154,5 +143,9 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>() {
 
     fun clickOnDateTime(){
        viewModel.showDatePicker()
+    }
+
+    override fun onDateTimeSelected(timestamp: Long) {
+        viewModel.onDateTimeResult(timestamp)
     }
 }

@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.misbah.todo.core.base.BaseFragment
 import com.misbah.todo.core.data.remote.APIResult
 import com.misbah.todo.databinding.QuitAppDialogBinding
+import com.misbah.todo.ui.main.MainActivity
 import com.misbah.todo.ui.utils.Utils
 import javax.inject.Inject
 
@@ -56,6 +57,7 @@ class QuitDialogFragment :  BaseFragment<DialogViewModel>()  {
 
 
     fun clickOnContinue() {
-
+        dismiss()
+        (requireActivity() as MainActivity).finish()
     }
 }

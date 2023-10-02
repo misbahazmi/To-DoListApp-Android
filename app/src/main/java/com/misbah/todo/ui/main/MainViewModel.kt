@@ -25,4 +25,8 @@ class MainViewModel @Inject constructor() : ViewModel(){
     fun onAddNewTaskClick() = CoroutineScope(Dispatchers.IO).launch {
         tasksEventChannel.send(TasksViewModel.TasksEvent.NavigateToAddTaskScreen)
     }
+
+    fun onBackClickQuitApp() = CoroutineScope(Dispatchers.IO).launch {
+        tasksEventChannel.send(TasksViewModel.TasksEvent.QuitAppPopUp)
+    }
 }

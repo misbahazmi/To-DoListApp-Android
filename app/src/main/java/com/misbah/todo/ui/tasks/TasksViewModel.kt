@@ -98,5 +98,6 @@ class TasksViewModel @Inject constructor(
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
         data object NavigateToDeleteAllCompletedScreen : TasksEvent()
+        data object QuitAppPopUp : TasksEvent()
     }
 }

@@ -7,6 +7,8 @@ import com.misbah.todo.ui.dialogs.ConfirmationDialogFragment
 import com.misbah.todo.ui.dialogs.DialogFragmentModule
 import com.misbah.todo.ui.dialogs.QuitDialogFragment
 import com.misbah.todo.ui.dialogs.TimePickerFragment
+import com.misbah.todo.ui.settings.SettingsFragment
+import com.misbah.todo.ui.settings.SettingsFragmentModule
 import com.misbah.todo.ui.tasks.TasksFragment
 import com.misbah.todo.ui.tasks.TasksFragmentModule
 import dagger.Module
@@ -32,5 +34,7 @@ abstract class FragmentBuilder {
     abstract fun contributeQuitDialogFragment() : ConfirmationDialogFragment
     @ContributesAndroidInjector(modules = [DialogFragmentModule::class])
     abstract fun contributeTimePickerFragment() : TimePickerFragment
+    @ContributesAndroidInjector(modules = [SettingsFragmentModule::class])
+    abstract fun contributeSettingsFragment() : SettingsFragment
 
 }

@@ -25,6 +25,7 @@ import com.misbah.todo.core.data.model.Task
 import com.misbah.todo.core.data.storage.SortOrder
 import com.misbah.todo.databinding.FragmentTasksBinding
 import com.misbah.todo.ui.adapters.TasksAdapter
+import com.misbah.todo.ui.listeners.OnItemClickListener
 import com.misbah.todo.ui.main.MainActivity
 import com.misbah.todo.ui.utils.exhaustive
 import com.misbah.todo.ui.utils.onQueryTextChanged
@@ -32,7 +33,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TasksFragment :  BaseFragment<TasksViewModel>()  , TasksAdapter.OnItemClickListener {
+class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
     private var _binding: FragmentTasksBinding? = null
     internal lateinit var viewModel: TasksViewModel
     private lateinit var searchView: SearchView
@@ -125,6 +126,7 @@ class TasksFragment :  BaseFragment<TasksViewModel>()  , TasksAdapter.OnItemClic
                                 TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                             findNavController().navigate(action)
                         }
+                        else ->{}
                     }.exhaustive
                 }
             }
