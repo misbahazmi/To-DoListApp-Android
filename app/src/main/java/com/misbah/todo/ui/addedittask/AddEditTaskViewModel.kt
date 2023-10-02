@@ -25,11 +25,14 @@ class AddEditTaskViewModel @Inject constructor(
 
     var task = MutableLiveData<Task>()
 
+    var selectedDateTime = task.value?.due ?: System.currentTimeMillis()
     var taskTitle = task.value?.title ?: ""
     var taskDescription = task.value?.name ?: ""
     var taskImportance = task.value?.important ?: 0
     var tasksCategory = task.value?.category ?: 0
-    var dueDate= task.value?.due ?: System.currentTimeMillis()
+
+    var dueDate = selectedDateTime
+
 
     private val addEditTaskEventChannel = Channel<AddEditTaskEvent>()
     val addEditTaskEvent = addEditTaskEventChannel.receiveAsFlow()

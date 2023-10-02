@@ -168,6 +168,8 @@ class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
 
         setHasOptionsMenu(true)
         (requireActivity() as MainActivity).showFAB()
+
+        viewModel.getTasksRemainingTask()
     }
 
 

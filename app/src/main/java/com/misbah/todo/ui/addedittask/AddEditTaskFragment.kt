@@ -135,9 +135,11 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>(), OnDateTimeList
                             TimePickerFragment.newInstance(this@AddEditTaskFragment).show(childFragmentManager, "timePicker")
                         }
                         is AddEditTaskViewModel.AddEditTaskEvent.DateTimeWithResult ->{
+                            viewModel.selectedDateTime = event.result
                             viewModel.dueDate = event.result
-                            binding.textViewDateDue.text = "Due Date: ${viewModel.task.value?.dueDateFormatted ?: DateFormat.getDateTimeInstance().format(viewModel.dueDate)}"
+                            binding.textViewDateDue.text = "Due Date: ${DateFormat.getDateTimeInstance().format(viewModel.dueDate)}"
                         }
+                        else -> {}
                     }.exhaustive
                 }
             }
