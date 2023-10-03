@@ -30,24 +30,6 @@ To-Do List - A simple to-do list app that allows users to add, delete and mark t
     - Everyday morning at 6 o'clock one notification with action for adding to-do tasks.
     - For each future task before 15 minutes, a reminder notification will trigger.
 
-Allow users to categorize tasks (e.g., work, personal, shopping).
-Implement the ability to filter tasks by category.
-3. Persistent Storage:
-
-Store tasks locally using Datastore
-4. User Interface (UI):
-
-Design an intuitive and user-friendly interface for adding, and viewing tasks, filtering…
-5. Task Notifications:
-
-Implement a feature to set reminders or notifications for tasks.
-6. Sorting and Filtering:
-
-Allow users to sort tasks by priority, due date, completeness..
-7. Search::
-
-Add a search functionality to allow users to search for specific tasks.
-
 # Screenshots
 ![Screenshot_20231003-231359_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/b8230c96-9a43-46b9-975f-3b913f280b8f)
 ![Screenshot_20231003-231414_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/57da9ed1-56d3-4ac5-b3fd-ddf6971f0825)
