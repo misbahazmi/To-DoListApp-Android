@@ -4,6 +4,9 @@ To-Do List - A simple to-do list app that allows users to add, delete and mark t
 # Code Structure 
 <img width="281" alt="image" src="https://github.com/misbahazmi/to-do-list-android/assets/8206573/23a75de5-ae68-4a62-b112-0358afa12116">
 
+# Output - APK File
+
+
 # Important Libs 
 - Dagger2
 - ViewModel

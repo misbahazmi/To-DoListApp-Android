@@ -27,14 +27,21 @@ abstract class TaskDatabase : RoomDatabase() {
             val dao = database.get().taskDao()
 
             applicationScope.launch {
-                dao.insert(Task("Wash the dishes","Wash the dishes"))
-                dao.insert(Task("Do the laundry", "Do the laundry"))
-                dao.insert(Task("Buy groceries","Buy groceries", important = AppEnums.TasksPriority.High.value))
+                dao.insert(Task("Wash the dishes","Wash the all the dishes"))
+                dao.insert(Task("Do the laundry", "Do the laundry and iron"))
+                dao.insert(Task("Buy groceries","Buy the groceries and shopping",4, important = AppEnums.TasksPriority.High.value))
+                dao.insert(Task("Groceries","Grocery shopping: buy milk, eggs, and vegetables.",4, important = AppEnums.TasksPriority.Medium.value))
                 dao.insert(Task("Prepare food", "Prepare food", important =  AppEnums.TasksPriority.Medium.value))
-                dao.insert(Task("Call mom", "Calling mom"))
+                dao.insert(Task("Call mom", "Calling mom", category = 2, important = AppEnums.TasksPriority.High.value))
                 dao.insert(Task("Visit grandma","Visiting native place to meet grandma",  completed = true))
                 dao.insert(Task("Repair my bike","Repair and servicing of Bike"))
-                dao.insert(Task("Call Elon Musk","Calling Elon Musk"))
+                dao.insert(Task("Call Elon Musk","Calling Elon Musk", 1))
+                dao.insert(Task("Learning","Start learning a new language", 3, important = AppEnums.TasksPriority.Medium.value))
+                dao.insert(Task("New Course","Complete a certification course in a new skill", 3, important = AppEnums.TasksPriority.Low.value))
+                dao.insert(Task("New Hobby","Explore a new hobby, like painting or playing a musical instrument.", 3))
+                dao.insert(Task("Bill payment","Pay the electricity bill online.", 2,  important = AppEnums.TasksPriority.High.value))
+                dao.insert(Task("Report & Meeting","Complete the report for the quarterly meeting.", 1,important = AppEnums.TasksPriority.High.value))
+                dao.insert(Task("Project Status","Send out the project status update email to the team.", 1,important = AppEnums.TasksPriority.Medium.value))
             }
         }
     }
