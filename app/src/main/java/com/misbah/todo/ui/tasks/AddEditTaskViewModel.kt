@@ -1,26 +1,40 @@
-package com.misbah.todo.ui.addedittask
+package com.misbah.todo.ui.tasks
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.misbah.todo.core.data.model.Category
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.misbah.todo.core.data.model.Task
 import com.misbah.todo.core.data.storage.TaskDao
+import com.misbah.todo.notifications.NotificationWorker
 import com.misbah.todo.ui.main.ADD_TASK_RESULT_OK
 import com.misbah.todo.ui.main.EDIT_TASK_RESULT_OK
-import com.misbah.todo.ui.tasks.TasksViewModel
-import com.nytimes.utils.AppEnums
+import com.misbah.todo.ui.utils.Constants
+import com.nytimes.utils.AppLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 class AddEditTaskViewModel @Inject constructor(
     private val taskDao: TaskDao,
-    private val state : SavedStateHandle
+    private val context : Context
 ) : ViewModel() {
 
     var task = MutableLiveData<Task>()
@@ -49,9 +63,36 @@ class AddEditTaskViewModel @Inject constructor(
         if (task.value != null) {
             val updatedTask =  task.value!!.copy(name = taskDescription, title = taskTitle , important = taskImportance, category = tasksCategory, due = dueDate)
             updateTask(updatedTask)
+            try {
+                WorkManager.getInstance(context).cancelAllWorkByTag(task.value?.due.toString())
+                //Update Schedule Tasks
+                createTaskReminder(taskTitle, taskDescription, dueDate.toString(), dueDate)
+            } catch (e: Exception){
+                e.localizedMessage?.let { AppLog.debugD(it) }
+            }
         } else {
             val newTask = Task(name = taskDescription, title = taskTitle, important = taskImportance, category = tasksCategory, due = dueDate)
             createTask(newTask)
+
+            //Schedule Tasks
+            createTaskReminder(taskTitle, taskDescription, dueDate.toString(), dueDate)
+        }
+    }
+
+    private fun createTaskReminder(title: String, details: String, tag : String, dueDate : Long){
+        val timeStamp = System.currentTimeMillis()
+        if ((dueDate - timeStamp) > Constants.TASK_REMINDER_TIME_INTERVAL + 5000){
+            AppLog.debugD("===Schedule Reminders===")
+            val data = Data.Builder()
+                .putString("NAME", title)
+                .putString("DATA", details)
+                .build()
+            val reminderRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInputData(data)
+                .setInitialDelay((dueDate - Constants.TASK_REMINDER_TIME_INTERVAL) - timeStamp, TimeUnit.MILLISECONDS)
+                .addTag(tag)
+                .build()
+            WorkManager.getInstance(context).enqueue(reminderRequest)
         }
     }
 

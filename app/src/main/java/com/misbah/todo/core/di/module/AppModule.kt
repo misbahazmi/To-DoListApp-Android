@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.room.Room
 import com.misbah.todo.core.data.remote.APIService
 import com.misbah.todo.core.data.remote.RemoteDataSource
-import com.misbah.todo.core.di.NetworkConnectionInterceptor
+import com.misbah.todo.core.data.remote.NetworkConnectionInterceptor
 import com.misbah.todo.ui.utils.Utils
 import com.google.gson.Gson
 import com.misbah.todo.core.data.storage.PreferencesManager
@@ -83,6 +83,7 @@ class AppModule {
         .build()
 
     @Provides
+    @Singleton
     fun provideTaskDao(db: TaskDatabase) = db.taskDao()
 
     @Provides

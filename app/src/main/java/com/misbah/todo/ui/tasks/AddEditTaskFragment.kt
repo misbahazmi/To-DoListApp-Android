@@ -1,4 +1,4 @@
-package com.misbah.todo.ui.addedittask
+package com.misbah.todo.ui.tasks
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -31,6 +31,14 @@ import kotlinx.coroutines.launch
 import java.text.DateFormat
 import javax.inject.Inject
 
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>(), OnDateTimeListener {
     private val tasksArgs: AddEditTaskFragmentArgs by navArgs()
     private var _binding: FragmentAddEditTaskBinding? = null
@@ -60,10 +68,12 @@ class AddEditTaskFragment : BaseFragment<AddEditTaskViewModel>(), OnDateTimeList
             if(viewModel.task.value == null){
                 btnSaveUpdate.text = getString(R.string.save)
                 textHeading.text = getString(R.string.add_tasks)
+                imgHeader.setImageResource(R.drawable.ic_add_task_data)
             }
             else {
                 btnSaveUpdate.text = getString(R.string.update)
                 textHeading.text = getString(R.string.update_tasks)
+                imgHeader.setImageResource(R.drawable.ic_edit_task_data)
             }
 
             editTextTaskTitle.setText(viewModel.task.value?.title ?: "")

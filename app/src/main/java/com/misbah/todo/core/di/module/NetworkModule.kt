@@ -2,7 +2,7 @@ package com.misbah.todo.core.di.module
 
 import com.misbah.todo.BuildConfig
 import com.misbah.todo.core.data.remote.APIService
-import com.misbah.todo.core.di.NetworkConnectionInterceptor
+import com.misbah.todo.core.data.remote.NetworkConnectionInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor

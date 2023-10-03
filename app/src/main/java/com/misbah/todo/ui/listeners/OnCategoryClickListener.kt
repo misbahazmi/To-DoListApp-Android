@@ -1,6 +1,6 @@
 package com.misbah.todo.ui.listeners
 
-import com.misbah.todo.core.data.model.Task
+import com.misbah.todo.core.data.model.Category
 
 /**
  * @author: Mohammad Misbah
@@ -10,9 +10,9 @@ import com.misbah.todo.core.data.model.Task
  * GitHub: https://github.com/misbahazmi
  * Expertise: Android||Java/Kotlin||Flutter
  */
-interface OnItemClickListener {
-        fun onItemClick(task: Task)
-        fun onItemDeleteClick(task: Task)
-        fun onItemEditClick(task: Task)
-        fun onCheckBoxClick(task: Task, isChecked: Boolean)
+interface OnCategoryClickListener {
+        fun onItemClick(task: Category)
+        fun onItemDeleteClick(task: Category)
+        fun onItemEditClick(task: Category)
+        fun onCheckBoxClick(task: Category, isChecked: Boolean)
     }

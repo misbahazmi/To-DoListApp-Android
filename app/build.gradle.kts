@@ -77,10 +77,10 @@ dependencies {
     implementation("com.google.dagger:dagger-android:2.46.1")
     implementation("com.google.dagger:dagger-android-support:2.46.1")
     kapt("com.google.dagger:dagger-android-processor:2.46.1")
+
     // Not a processor, but forces Dagger to use newer metadata lib
     kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.2")
     kapt("com.google.dagger:dagger-compiler:2.46.1")
-
 
     // Networking
     implementation("com.google.code.gson:gson:2.9.0")
@@ -96,6 +96,9 @@ dependencies {
 
     //Datastore
     implementation("androidx.datastore:datastore-preferences:1.1.0-alpha05")
+
+    //Work manager
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     //TagView
     implementation(project(":chips-view-lib"))

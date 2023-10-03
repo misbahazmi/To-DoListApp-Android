@@ -23,7 +23,7 @@
                 android:title="Sort by due date" />
             <item
                 android:id="@+id/action_sort_by_priority"
-                android:title="Sort by Priority" />
+                android:title="Sort by priority" />
 
         </menu>
 

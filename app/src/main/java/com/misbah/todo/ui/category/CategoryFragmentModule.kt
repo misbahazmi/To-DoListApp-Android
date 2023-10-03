@@ -1,7 +1,8 @@
-package com.misbah.todo.ui.addedittask
+package com.misbah.todo.ui.category
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModelProvider
+import com.misbah.todo.core.data.storage.PreferencesManager
 import com.misbah.todo.core.data.storage.TaskDao
 import com.misbah.todo.core.di.factory.ViewModelFactory
 import dagger.Module
@@ -16,15 +17,15 @@ import dagger.Provides
  * Expertise: Android||Java/Kotlin||Flutter
  */
 @Module
-class AddEditFragmentModule {
+class CategoryFragmentModule {
 
     @Provides
-    fun provideViewModel(taskDao : TaskDao, state : SavedStateHandle) : AddEditTaskViewModel {
-        return AddEditTaskViewModel(taskDao, state)
+    fun provideViewModel(taskDao : TaskDao, preferencesManager : PreferencesManager) : CategoryViewModel {
+        return CategoryViewModel(taskDao, preferencesManager)
     }
 
     @Provides
-    fun provideViewModelProvider(viewModel: AddEditTaskViewModel) : ViewModelProvider.Factory{
+    fun provideViewModelProvider(viewModel: CategoryViewModel) : ViewModelProvider.Factory{
         return ViewModelFactory(viewModel)
     }
 

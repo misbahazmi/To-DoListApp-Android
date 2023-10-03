@@ -24,7 +24,7 @@ import javax.inject.Singleton
     ]
 )
 
-interface MainComponent : AndroidInjector<ToDoApplication>{
+interface MainComponent : AndroidInjector<ToDoApplication> {
     @Component.Builder
     interface Builder{
         @BindsInstance

@@ -2,6 +2,7 @@ package com.misbah.todo.ui.main
 
 
 import androidx.lifecycle.ViewModel
+import com.misbah.todo.ui.category.CategoryViewModel
 import com.misbah.todo.ui.tasks.TasksViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +22,15 @@ import javax.inject.Inject
  */
 class MainViewModel @Inject constructor() : ViewModel(){
     private val tasksEventChannel = Channel<TasksViewModel.TasksEvent>()
+    private val categoryEventChannel = Channel<CategoryViewModel.CategoryEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
+    val categoryEvent = categoryEventChannel.receiveAsFlow()
     fun onAddNewTaskClick() = CoroutineScope(Dispatchers.IO).launch {
         tasksEventChannel.send(TasksViewModel.TasksEvent.NavigateToAddTaskScreen)
+    }
+
+    fun onAddNewCategoryClick() = CoroutineScope(Dispatchers.IO).launch {
+        categoryEventChannel.send(CategoryViewModel.CategoryEvent.NavigateToAddCategoryDialog)
     }
 
     fun onBackClickQuitApp() = CoroutineScope(Dispatchers.IO).launch {

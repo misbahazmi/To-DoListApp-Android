@@ -1,4 +1,8 @@
-package com.misbah.todo.core.data.model
+package com.misbah.todo.core.di.factory
+
+import android.content.Context
+import androidx.work.Worker
+import androidx.work.WorkerParameters
 
 /**
  * @author: Mohammad Misbah
@@ -8,4 +12,6 @@ package com.misbah.todo.core.data.model
  * GitHub: https://github.com/misbahazmi
  * Expertise: Android||Java/Kotlin||Flutter
  */
-data class Category(val id: Int, val name: String)
+interface ChildWorkerFactory {
+    fun create(appContext: Context, params: WorkerParameters): Worker
+}

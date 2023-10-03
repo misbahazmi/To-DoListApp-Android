@@ -1,6 +1,9 @@
 package com.misbah.todo.ui.utils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Bitmap.createBitmap
+import android.graphics.Canvas
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -14,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.ContextCompat.getDrawable
 
 /**
  * @author: Mohammad Misbah
@@ -81,4 +85,15 @@ inline fun <reified T : ViewModel> FragmentActivity.injectViewModel(factory: Vie
 
 inline fun <reified T : ViewModel> Fragment.injectViewModel(factory: ViewModelProvider.Factory): T {
     return ViewModelProvider(this, factory)[T::class.java]
+}
+
+fun Context.vectorToBitmap(drawableId: Int): Bitmap? {
+    val drawable = getDrawable(this, drawableId) ?: return null
+    val bitmap = createBitmap(
+        drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+    ) ?: return null
+    val canvas = Canvas(bitmap)
+    drawable.setBounds(0, 0, canvas.width, canvas.height)
+    drawable.draw(canvas)
+    return bitmap
 }

@@ -13,7 +13,7 @@ object Constants {
     //Application TAGs
     const val LOG_TAG = "ToDo_App-Log"
     const val CHANNEL_ID = "to-do-app-channel-id"
-    const val TASK_REMINDER_TIME_INTERVAL = 30 * 60 * 1000
+    const val TASK_REMINDER_TIME_INTERVAL = 15 * 60 * 1000
 
     const val PREF_NAME = "PrefName"
     const val IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch"

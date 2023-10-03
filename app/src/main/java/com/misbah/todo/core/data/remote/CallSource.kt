@@ -1,9 +1,8 @@
-package com.misbah.todo.core.data
+package com.misbah.todo.core.data.remote
 
 import androidx.lifecycle.liveData
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.misbah.todo.core.data.remote.APIResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 

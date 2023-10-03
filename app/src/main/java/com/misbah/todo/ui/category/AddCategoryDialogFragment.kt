@@ -1,24 +1,26 @@
 package com.misbah.todo.ui.category
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.misbah.todo.core.base.BaseFragment
-import com.misbah.todo.core.data.model.Category
-import com.misbah.todo.databinding.FragmentCategoryBinding
-import com.misbah.todo.ui.adapters.CategoryAdapter
-import com.misbah.todo.ui.listeners.OnCategoryClickListener
+import com.misbah.todo.core.data.remote.APIResult
+import com.misbah.todo.databinding.AddCategoryDialogBinding
+import com.misbah.todo.databinding.QuitAppDialogBinding
 import com.misbah.todo.ui.main.MainActivity
-import com.misbah.todo.ui.tasks.TasksFragmentDirections
-import com.misbah.todo.ui.tasks.TasksViewModel
+import com.misbah.todo.ui.utils.Utils
 import com.misbah.todo.ui.utils.exhaustive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,39 +33,30 @@ import javax.inject.Inject
  * GitHub: https://github.com/misbahazmi
  * Expertise: Android||Java/Kotlin||Flutter
  */
-class CategoryFragment : BaseFragment<CategoryViewModel>(), OnCategoryClickListener {
-
-    private var _binding: FragmentCategoryBinding? = null
+class AddCategoryDialogFragment :  BaseFragment<CategoryViewModel>()  {
+    lateinit var binding: AddCategoryDialogBinding
     internal lateinit var viewModel: CategoryViewModel
     @Inject
     lateinit var factory: ViewModelProvider.Factory
+    @Inject
+    lateinit var utils: Utils
 
-    private val binding get() = _binding!!
     override fun getViewModel(): CategoryViewModel {
         viewModel = ViewModelProvider(viewModelStore, factory)[CategoryViewModel::class.java]
         return viewModel
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
+        binding = AddCategoryDialogBinding.inflate(inflater, container, false)
+        binding.farg = this@AddCategoryDialogFragment
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val categoryAdapter =  CategoryAdapter(this@CategoryFragment)
-        binding.apply {
-            recyclerViewCategory.apply {
-                adapter =categoryAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
-            }
-        }
-        categoryAdapter.submitList(viewModel.categoryList().value)
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.categoryEvent.collect { event ->
@@ -80,23 +73,25 @@ class CategoryFragment : BaseFragment<CategoryViewModel>(), OnCategoryClickListe
                 }
             }
         }
-        (requireActivity() as MainActivity).showFAB()
+    }
+    override fun onStart() {
+        super.onStart()
+        dialog!!.window!!.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+        dialog!!.window!!.setBackgroundDrawable(InsetDrawable(ColorDrawable(Color.TRANSPARENT),48))
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    companion object {
+        @JvmStatic
+        fun newInstance() = AddCategoryDialogFragment()
     }
 
-    override fun onItemClick(task: Category) {}
+    fun clickOnCancel() {
+        dismiss()
+    }
 
-    override fun onItemDeleteClick(task: Category) {
+
+
+    fun clickOnContinue() {
         viewModel.displayMessage("To Be Implemented")
     }
-
-    override fun onItemEditClick(task: Category) {
-        viewModel.displayMessage("To Be Implemented")
-    }
-
-    override fun onCheckBoxClick(task: Category, isChecked: Boolean) {}
 }

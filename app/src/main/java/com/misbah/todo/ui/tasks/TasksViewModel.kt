@@ -1,5 +1,7 @@
 package com.misbah.todo.ui.tasks
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -8,13 +10,18 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.util.query
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.misbah.todo.core.data.model.Task
 import com.misbah.todo.core.data.storage.PreferencesManager
 import com.misbah.todo.core.data.storage.SortOrder
 import com.misbah.todo.core.data.storage.TaskDao
+import com.misbah.todo.notifications.NotificationWorker
 import com.misbah.todo.ui.main.ADD_TASK_RESULT_OK
 import com.misbah.todo.ui.main.EDIT_TASK_RESULT_OK
 import com.misbah.todo.ui.utils.Constants
+import com.nytimes.utils.AppLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,12 +30,23 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class TasksViewModel @Inject constructor(
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
+class TasksViewModel
+@Inject constructor(
     private val taskDao: TaskDao,
     private val preferencesManager: PreferencesManager,
-    state: SavedStateHandle
+    state: SavedStateHandle,
+    private val context: Context
 )  : ViewModel() {
     val searchQuery = state.getLiveData("searchQuery", "")
 
@@ -80,6 +98,11 @@ class TasksViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             taskDao.delete(task)
             tasksEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(task))
+            try {
+                WorkManager.getInstance(context).cancelAllWorkByTag(task.due.toString())
+            } catch (e: Exception){
+                e.localizedMessage?.let { AppLog.debugD(it) }
+            }
         }
     }
     fun onUndoDeleteClick(task: Task) = CoroutineScope(Dispatchers.IO).launch {

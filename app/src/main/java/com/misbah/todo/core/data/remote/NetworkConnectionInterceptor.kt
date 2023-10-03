@@ -1,4 +1,4 @@
-package com.misbah.todo.core.di
+package com.misbah.todo.core.data.remote
 
 import com.misbah.todo.ui.utils.NoInternetException
 import com.misbah.todo.ui.utils.Utils

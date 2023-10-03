@@ -8,7 +8,14 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.misbah.todo.R
 import com.misbah.todo.core.data.model.Category
-
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 class CategoryArrayAdapter(context: Context, resource: Int, var items: List<Category>)
     : ArrayAdapter<Category>(context, resource, items) {
     

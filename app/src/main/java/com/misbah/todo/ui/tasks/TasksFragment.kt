@@ -39,6 +39,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
     private var _binding: FragmentTasksBinding? = null
     internal lateinit var viewModel: TasksViewModel
@@ -168,7 +176,6 @@ class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
 
         setHasOptionsMenu(true)
         (requireActivity() as MainActivity).showFAB()
-
         viewModel.getTasksRemainingTask()
     }
 
@@ -231,6 +238,19 @@ class TasksFragment :  BaseFragment<TasksViewModel>(), OnItemClickListener {
 
     override fun onItemClick(task: Task) {
         viewModel.onTaskSelected(task)
+    }
+
+    override fun onItemDeleteClick(task: Task) {
+        viewModel.onTaskSwiped(task)
+    }
+
+    override fun onItemEditClick(task: Task) {
+        val action =
+            TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
+                "Edit Tasks",
+                task
+            )
+        findNavController().navigate(action)
     }
 
     override fun onCheckBoxClick(task: Task, isChecked: Boolean) {

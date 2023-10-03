@@ -26,6 +26,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:theme="@style/Theme.ToDoList.NoActionBar">
         </activity>
         <receiver

@@ -24,6 +24,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -35,15 +36,25 @@ import com.misbah.todo.R
 import com.misbah.todo.core.base.BaseActivity
 import com.misbah.todo.databinding.ActivityMainBinding
 import com.misbah.todo.notifications.NotificationReminderReceiver
+import com.misbah.todo.ui.category.CategoryFragmentDirections
+import com.misbah.todo.ui.category.CategoryViewModel
 import com.misbah.todo.ui.tasks.TasksFragmentDirections
 import com.misbah.todo.ui.tasks.TasksViewModel
 import com.misbah.todo.ui.utils.Constants
 import com.misbah.todo.ui.utils.exhaustive
 import kotlinx.coroutines.launch
-import java.text.DateFormat
+import java.util.Calendar
 import javax.inject.Inject
 
 
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 class MainActivity : BaseActivity<MainViewModel>() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -61,10 +72,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
-
-        binding.appBarMain.fab.setOnClickListener { view ->
-            viewModel.onAddNewTaskClick()
-        }
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -110,6 +117,33 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.categoryEvent.collect{event->
+                    when (event) {
+                        is CategoryViewModel.CategoryEvent.NavigateToAddCategoryDialog -> {
+                            val action = CategoryFragmentDirections.actionAddCategoryDialogFragment()
+                            navController.navigate(action)
+                        }
+                        else ->{}
+                    }.exhaustive
+                }
+            }
+        }
+
+        binding.appBarMain.fab.setOnClickListener {
+            val navController = findNavController(this, R.id.nav_host_fragment_content_main)
+            when (navController.currentDestination!!.id) {
+                R.id.nav_category -> {
+                    viewModel.onAddNewCategoryClick()
+                }
+                R.id.tasksFragment -> {
+                    viewModel.onAddNewTaskClick()
+                }
+                else -> {}
+            }
+        }
         binding.appBarMain.fab.startAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_anim))
 
         if (Build.VERSION.SDK_INT >= 33) {
@@ -129,46 +163,29 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 })
         }
         navView.setNavigationItemSelectedListener { menuItem ->
-            drawerLayout.closeDrawers()   // close drawer when item is tapped
+            // close drawer when item is tapped
+            drawerLayout.closeDrawers()
             val bundle = bundleOf("title" to "New Task", "task" to null)
             when (menuItem.itemId) {
                 R.id.addEditTaskFragment -> {
                     navController.navigate(menuItem.itemId, bundle)
+                    hideFAB()
+                }
+                R.id.tasksFragment -> {
+                    showFAB()
+                    navController.navigate(menuItem.itemId)
                 }
                 else -> {
+                    hideFAB()
                     navController.navigate(menuItem.itemId)
                 }
             }
             true
         }
-        //scheduleTaskReminder()
+        scheduleAllTaskEveryMorningReminder()
         createNotificationChannel()
         requestNotificationPermission()
     }
-
-    private fun scheduleTaskReminder() {
-        val intentAlarm = Intent(this, NotificationReminderReceiver::class.java)
-        println("calling Alarm receiver ")
-        val alarmManager = this.getSystemService(ALARM_SERVICE) as AlarmManager
-        //set the notification to repeat every fifteen minutes
-        //set the notification to repeat every fifteen minutes
-        val startTime = (1 * 60 * 1000).toLong() // 2 min
-
-        // set unique id to the pending item, so we can call it when needed
-        val pi = PendingIntent.getBroadcast(
-            this,
-            1100,
-            intentAlarm,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC, SystemClock.elapsedRealtime() +
-                    startTime, (60 * 1000).toLong(), pi
-        )
-        //alarmManager.cancel(pi)
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
@@ -209,6 +226,29 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 requestPermissionLauncher.launch(POST_NOTIFICATIONS)
             }
         }
+    }
+    private fun scheduleAllTaskEveryMorningReminder() {
+        val intentAlarm = Intent(this, NotificationReminderReceiver::class.java)
+        val alarmManager = this.getSystemService(ALARM_SERVICE) as AlarmManager
+        //set the notification to repeat every fifteen minutes
+        val alarmStartTime: Calendar = Calendar.getInstance()
+        val now: Calendar = Calendar.getInstance()
+        alarmStartTime.set(Calendar.HOUR_OF_DAY, 6)
+        alarmStartTime.set(Calendar.MINUTE, 0)
+        alarmStartTime.set(Calendar.SECOND, 0)
+        if (now.after(alarmStartTime)) {
+            alarmStartTime.add(Calendar.DATE, 1)
+        }
+        // set unique id to the pending item, so we can call it when needed
+        val pendingIntent = PendingIntent.getBroadcast(
+            this@MainActivity,
+            1100,
+            intentAlarm,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC, alarmStartTime.timeInMillis,AlarmManager.INTERVAL_DAY, pendingIntent
+        )
     }
 
 

@@ -1,5 +1,10 @@
 package com.misbah.todo.ui.utils
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Bitmap.createBitmap
+import android.graphics.Canvas
 import androidx.appcompat.widget.SearchView
 import java.io.IOException
 /**
@@ -23,4 +28,5 @@ inline fun SearchView.onQueryTextChanged(crossinline listener: (String) -> Unit)
             return true
         }
     })
+
 }

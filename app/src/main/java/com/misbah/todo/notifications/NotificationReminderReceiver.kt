@@ -22,35 +22,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 class NotificationReminderReceiver @Inject constructor(): BroadcastReceiver() {
-    private val TAG = "NotificationReminderReceiver"
-
-    @Inject
-    lateinit var repository: TaskDataRepository
-
-    private var remainingTasks: LiveData<List<Task>>? = null
-
     override fun onReceive(context: Context, intent: Intent) {
-        Toast.makeText(context, "AlarmReceiver", Toast.LENGTH_LONG).show()
-        var title = context.resources.getText(R.string.app_name)
-        var description = context.resources.getText(R.string.nav_header_subtitle)
-        var id = 0
-        if(intent.action == "tasks-reminder"){
-            title = intent.getStringExtra("title").toString()
-            description  = intent.getStringExtra("name").toString()
-            id = intent.getIntExtra("id", 0)
-        }
-        val mgr = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val title = context.resources.getText(R.string.app_name)
+        val description = context.resources.getText(R.string.nav_header_subtitle)
 
         val mBuilder = NotificationCompat.Builder(context,Constants.CHANNEL_ID)
 
-        mBuilder.setSmallIcon(R.drawable.ic_task_menu) // notification icon
+        mBuilder.setSmallIcon(R.drawable.ic_task_menu)
             .setContentTitle(title)
             .setContentText(description)
             .setStyle(NotificationCompat.BigTextStyle()
                 .bigText(description))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true) // clear notification after click
+            .setAutoCancel(true)
 
         val resultIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -76,17 +69,7 @@ class NotificationReminderReceiver @Inject constructor(): BroadcastReceiver() {
         mBuilder.setContentIntent(resultPendingIntent)
         val mNotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.notify(id, mBuilder.build())
+        mNotificationManager.notify(2222, mBuilder.build())
 
-        //getTasksRemainingTask()
-
-        AppLog.debugD("SIZE: ${repository}")
-
-    }
-
-    private fun getTasksRemainingTask() = CoroutineScope(Dispatchers.IO).launch {
-        val currentTime = System.currentTimeMillis()
-        val futureTime = System.currentTimeMillis() + Constants.TASK_REMINDER_TIME_INTERVAL
-        //remainingTasks = taskDao.getTasksRemainingTask(true,currentTime,futureTime).asLiveData()
     }
 }

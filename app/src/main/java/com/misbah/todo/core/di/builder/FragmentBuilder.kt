@@ -1,8 +1,11 @@
 package com.misbah.todo.core.di.builder
 
 
-import com.misbah.todo.ui.addedittask.AddEditFragmentModule
-import com.misbah.todo.ui.addedittask.AddEditTaskFragment
+import com.misbah.todo.ui.category.AddCategoryDialogFragment
+import com.misbah.todo.ui.tasks.AddEditFragmentModule
+import com.misbah.todo.ui.tasks.AddEditTaskFragment
+import com.misbah.todo.ui.category.CategoryFragment
+import com.misbah.todo.ui.category.CategoryFragmentModule
 import com.misbah.todo.ui.dialogs.ConfirmationDialogFragment
 import com.misbah.todo.ui.dialogs.DialogFragmentModule
 import com.misbah.todo.ui.dialogs.QuitDialogFragment
@@ -36,5 +39,8 @@ abstract class FragmentBuilder {
     abstract fun contributeTimePickerFragment() : TimePickerFragment
     @ContributesAndroidInjector(modules = [SettingsFragmentModule::class])
     abstract fun contributeSettingsFragment() : SettingsFragment
-
+    @ContributesAndroidInjector(modules = [CategoryFragmentModule::class])
+    abstract fun contributeCategoryFragment() : CategoryFragment
+    @ContributesAndroidInjector(modules = [CategoryFragmentModule::class])
+    abstract fun contributeAddCategoryDialogFragment() : AddCategoryDialogFragment
 }

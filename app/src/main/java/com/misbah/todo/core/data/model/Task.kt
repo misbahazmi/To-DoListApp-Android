@@ -7,7 +7,14 @@ import androidx.room.PrimaryKey
 import com.nytimes.utils.AppEnums
 import kotlinx.parcelize.Parcelize
 import java.text.DateFormat
-
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 @Entity(tableName = "task_table")
 @Parcelize
 data class Task(
@@ -24,4 +31,18 @@ data class Task(
         get() = DateFormat.getDateTimeInstance().format(created)
     val dueDateFormatted: String
         get() = DateFormat.getDateTimeInstance().format(due)
+    val displayPriority: String
+        get() = when(important){
+            AppEnums.TasksPriority.Normal.value->
+                AppEnums.TasksPriority.Normal.name
+            AppEnums.TasksPriority.Low.value->
+                AppEnums.TasksPriority.Low.name
+            AppEnums.TasksPriority.Medium.value->
+                AppEnums.TasksPriority.Medium.name
+            AppEnums.TasksPriority.High.value->
+                AppEnums.TasksPriority.High.name
+            else->
+                AppEnums.TasksPriority.Normal.name
+
+        }
 }

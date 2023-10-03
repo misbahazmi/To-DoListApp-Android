@@ -17,6 +17,14 @@ import com.misbah.todo.databinding.QuitAppDialogBinding
 import com.misbah.todo.ui.utils.Utils
 import javax.inject.Inject
 
+/**
+ * @author: Mohammad Misbah
+ * @since: 03-Oct-2023
+ * @sample: Technology Assessment for Sr. Android Role
+ * Email Id: mohammadmisbahazmi@gmail.com
+ * GitHub: https://github.com/misbahazmi
+ * Expertise: Android||Java/Kotlin||Flutter
+ */
 class ConfirmationDialogFragment :  BaseFragment<DialogViewModel>()  {
     lateinit var binding: ConfirmationDialogBinding
     internal lateinit var viewModel: DialogViewModel

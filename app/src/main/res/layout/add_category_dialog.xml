@@ -6,12 +6,13 @@
     <data>
         <variable
             name="farg"
-            type="com.misbah.todo.ui.dialogs.QuitDialogFragment" />
+            type="com.misbah.todo.ui.category.AddCategoryDialogFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
+        android:padding="12dp"
         android:background="@drawable/bg_quit_app"
         tools:context=".ui.profile.LoginDialogFragment">
 
@@ -97,7 +98,6 @@
                         android:paddingTop="4dp"
                         android:fontFamily="@font/lato"
                         android:text="@string/save"
-                        android:background="@drawable/bg_category"
                         android:textColor="@color/text_color_red"
                         android:textSize="14sp"
                         android:textStyle="bold" />
