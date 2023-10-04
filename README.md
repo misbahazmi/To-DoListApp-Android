@@ -4,6 +4,9 @@ To-Do List - A simple to-do list app that allows users to add, delete and mark t
 # Code Structure 
 <img width="281" alt="image" src="https://github.com/misbahazmi/to-do-list-android/assets/8206573/23a75de5-ae68-4a62-b112-0358afa12116">
 
+# Architecture 
+Clean MVVM - DI
+
 # Output - APK File
 
 [APK File Link](https://github.com/misbahazmi/To-DoListApp-Android/blob/master/output/To-DoApp-V1.0.0.apk)
@@ -38,6 +41,9 @@ To-Do List - A simple to-do list app that allows users to add, delete and mark t
 ![Screenshot_20231003-231359_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/b8230c96-9a43-46b9-975f-3b913f280b8f)
 ![Screenshot_20231003-231414_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/57da9ed1-56d3-4ac5-b3fd-ddf6971f0825)
 ![Screenshot_20231003-231421_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/2eaf6fae-4900-42c2-a15d-4cb134995c1f)
+<img width="397" alt="image" src="https://github.com/misbahazmi/To-DoListApp-Android/assets/8206573/1e9770d9-2554-4b69-b1bb-08214a733902">
+<img width="397" alt="image" src="https://github.com/misbahazmi/To-DoListApp-Android/assets/8206573/0be60050-3114-47c5-a625-4230ba6ecdbc">
+
 ![Screenshot_20231003-231442_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/50e9cdde-e66d-4971-89a8-e8041c7f6361)
 ![Screenshot_20231003-231449_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/65e9f355-ebdc-455c-b51b-efa179b63a77)
 ![Screenshot_20231003-231508_To-Do List](https://github.com/misbahazmi/to-do-list-android/assets/8206573/3c2f2d1e-de4b-4684-9f4c-b18eb2b70165)
